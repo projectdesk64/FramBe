@@ -21,7 +21,7 @@ export default function DashboardPG() {
                         className={card.title === "Payments & Invoices" ? "cursor-pointer hover:border-primary/50 transition-colors" : ""}
                         onClick={() => {
                             if (card.title === "Payments & Invoices") {
-                                navigate("/payments");
+                                navigate("/dashboard/payments");
                             }
                         }}
                     >

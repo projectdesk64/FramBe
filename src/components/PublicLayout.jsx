@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 
-export default function Layout() {
+export default function PublicLayout() {
     return (
         <div className="relative flex min-h-screen flex-col bg-background font-sans antialiased text-foreground">
             <Header />

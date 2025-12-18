@@ -17,10 +17,12 @@ export default function DashboardFarmer() {
                 {cards.map((card, index) => (
                     <Card
                         key={index}
-                        className={card.title === "Payments Overview" ? "cursor-pointer hover:border-primary/50 transition-colors" : ""}
+                        className={(card.title === "Payments Overview" || card.title === "Incoming Orders") ? "cursor-pointer hover:border-primary/50 transition-colors" : ""}
                         onClick={() => {
                             if (card.title === "Payments Overview") {
-                                navigate("/payments");
+                                navigate("/dashboard/payments");
+                            } else if (card.title === "Incoming Orders") {
+                                navigate("/dashboard/orders");
                             }
                         }}
                     >

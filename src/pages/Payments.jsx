@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const PAYMENT_DATA = [
     { id: "ORD-7281", counterparty: "Farmer: Rajesh Kumar", amount: "₹12,400", status: "Paid", method: "UPI", date: "2023-12-15" },
@@ -12,6 +14,7 @@ const PAYMENT_DATA = [
 ];
 
 export default function Payments() {
+    const navigate = useNavigate();
     const [role, setRole] = useState(localStorage.getItem('farmbe_role') || 'pg');
 
     useEffect(() => {
@@ -41,6 +44,9 @@ export default function Payments() {
 
     return (
         <div className="space-y-8">
+            <Button variant="ghost" onClick={() => navigate(-1)} className="mb-2">
+                &lsaquo; Back
+            </Button>
             <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-bold tracking-tight">Payments Visibility</h1>
                 <p className="text-muted-foreground">{getRoleTitle()}</p>

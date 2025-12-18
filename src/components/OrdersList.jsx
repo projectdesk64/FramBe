@@ -87,7 +87,7 @@ export default function OrdersList() {
                         <TableRow
                             key={order.id}
                             className="cursor-pointer"
-                            onClick={() => navigate(`/orders/${order.id}`)}
+                            onClick={() => navigate(`/dashboard/orders/${order.id}`)}
                         >
                             <TableCell className="font-medium">{order.id}</TableCell>
                             <TableCell>{order.product}</TableCell>

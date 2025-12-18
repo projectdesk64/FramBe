@@ -21,7 +21,7 @@ export default function DashboardMiddleman() {
                         className={card.title === "Commission Overview" ? "cursor-pointer hover:border-primary/50 transition-colors" : ""}
                         onClick={() => {
                             if (card.title === "Commission Overview") {
-                                navigate("/payments");
+                                navigate("/dashboard/payments");
                             }
                         }}
                     >

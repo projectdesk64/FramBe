@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/Layout';
+import PublicLayout from './components/PublicLayout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -18,16 +18,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<PublicLayout />}>
           <Route index element={<Landing />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
-
-          <Route path="orders" element={<Orders />} />
-          <Route path="orders/:orderId" element={<OrderDetail />} />
-          <Route path="payments" element={<Payments />} />
-          <Route path="eta" element={<ETA />} />
-          <Route path="profile" element={<Profile />} />
         </Route>
 
         <Route path="dashboard" element={<DashboardLayout />}>
@@ -35,6 +29,11 @@ function App() {
           <Route path="pg" element={<DashboardPG />} />
           <Route path="farmer" element={<DashboardFarmer />} />
           <Route path="middleman" element={<DashboardMiddleman />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="orders/:orderId" element={<OrderDetail />} />
+          <Route path="payments" element={<Payments />} />
+          <Route path="eta" element={<ETA />} />
         </Route>
       </Routes>
     </BrowserRouter>

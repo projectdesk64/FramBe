@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,15 @@ export default function Login() {
 
         // For demo purposes, we store the role and navigate
         localStorage.setItem('farmbe_role', selectedRole);
+
+        // Always store/overwrite farmbe_user for demo consistency if using "Continue"
+        const demoUser = {
+            name: 'Demo User',
+            email: email || 'demo@farmbe.com',
+            role: selectedRole
+        };
+        localStorage.setItem('farmbe_user', JSON.stringify(demoUser));
+
         navigate(`/dashboard/${selectedRole}`);
     };
 
@@ -90,7 +99,7 @@ export default function Login() {
                 </Card>
 
                 <p className="text-center text-sm text-muted-foreground">
-                    Don't have an account? <span className="text-primary hover:underline cursor-pointer">Sign up</span>
+                    Don't have an account? <Link to="/signup" className="text-primary hover:underline">Sign up</Link>
                 </p>
             </div>
         </div>
