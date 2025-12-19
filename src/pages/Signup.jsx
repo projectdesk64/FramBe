@@ -34,6 +34,11 @@ export default function Signup() {
         localStorage.setItem('farmbe_user', JSON.stringify(newUser));
         localStorage.setItem('farmbe_role', formData.role);
 
+        // Add to persistent users DB for Login lookup
+        const usersDB = JSON.parse(localStorage.getItem('farmbe_users_db') || '[]');
+        usersDB.push(newUser);
+        localStorage.setItem('farmbe_users_db', JSON.stringify(usersDB));
+
         initStore();
         navigate(`/dashboard/${formData.role}`);
     };

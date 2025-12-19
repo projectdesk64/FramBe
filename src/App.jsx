@@ -56,12 +56,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Public/General Routes with Navbar */}
+        {/* LANDING PAGE IS NOW HERE TO SHARE LAYOUT */}
         <Route element={<AppLayout />}>
+          <Route path="/" element={<Landing />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/about" element={<PlaceholderPage title="Our Mission" />} />
           <Route path="/contact" element={<PlaceholderPage title="Contact Us" />} />

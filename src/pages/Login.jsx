@@ -16,38 +16,50 @@ export default function Login() {
         if (e) e.preventDefault();
         setError('');
 
-        let targetRole = '';
+        // 1. Check persistent DB (New Dynamic Auth)
+        const usersDB = JSON.parse(localStorage.getItem('farmbe_users_db') || '[]');
+        const dbUser = usersDB.find(u => u.email === email && u.password === password);
 
-        if (email === "ramesh@greenearth.com" && password === "123456") {
-            targetRole = 'farmer';
-        } else if (email === "suresh@saipg.com" && password === "123456") {
-            targetRole = 'pg';
-        } else {
-            const storedUserJSON = localStorage.getItem('farmbe_user');
-            if (storedUserJSON) {
-                const storedUser = JSON.parse(storedUserJSON);
-                if (storedUser.email === email && storedUser.password === password) {
-                    targetRole = storedUser.role;
+        if (dbUser) {
+            localStorage.setItem('farmbe_user', JSON.stringify(dbUser));
+            localStorage.setItem('farmbe_role', dbUser.role);
+            navigate(`/dashboard/${dbUser.role}`);
+            return;
+        }
+
+        // 2. Check Hardcoded / Demo Config
+        const isRamesh = email === "ramesh@greenearth.com" && password === "123456";
+        const isSuresh = email === "suresh@saipg.com" && password === "123456";
+
+        if (isRamesh || isSuresh) {
+            const role = isRamesh ? 'farmer' : 'pg';
+            const demoUser = {
+                name: isRamesh ? 'Ramesh Farmer' : 'Suresh PG',
+                email: email,
+                role: role,
+                password: password
+            };
+
+            localStorage.setItem('farmbe_user', JSON.stringify(demoUser));
+            localStorage.setItem('farmbe_role', role);
+            navigate(`/dashboard/${role}`);
+            return;
+        }
+
+        // 3. Last Resort: Check if the currently valid session matches (Edge case)
+        const existingSession = localStorage.getItem('farmbe_user');
+        if (existingSession) {
+            try {
+                const sUser = JSON.parse(existingSession);
+                if (sUser.email === email && sUser.password === password) {
+                    localStorage.setItem('farmbe_role', sUser.role);
+                    navigate(`/dashboard/${sUser.role}`);
+                    return;
                 }
-            }
+            } catch (e) { console.error("Session parse error", e); }
         }
 
-        if (targetRole) {
-            if (!localStorage.getItem('farmbe_user')) {
-                const mockUser = {
-                    name: targetRole === 'farmer' ? 'Ramesh Farmer' : 'Suresh PG',
-                    email: email,
-                    role: targetRole,
-                    password: password
-                };
-                localStorage.setItem('farmbe_user', JSON.stringify(mockUser));
-            }
-
-            localStorage.setItem('farmbe_role', targetRole);
-            navigate(`/dashboard/${targetRole}`);
-        } else {
-            setError("Invalid credentials. Try the Demo buttons!");
-        }
+        setError("Invalid credentials. Try the Demo buttons!");
     };
 
     const demoLogin = (role) => {

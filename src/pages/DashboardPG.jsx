@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 const DashboardPG = () => {
     const [inventory, setInventory] = useState([]);
     const [cart, setCart] = useState([]);
+    const user = JSON.parse(localStorage.getItem('farmbe_user') || '{"name": "Sai PG Stays", "role": "Buyer"}');
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [orderPlaced, setOrderPlaced] = useState(null);
 
@@ -91,8 +92,10 @@ const DashboardPG = () => {
                 {/* Page Header & Actions */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Marketplace</h1>
-                        <p className="text-sm font-medium text-gray-500 mt-1">Sai PG Stays • Buyer</p>
+                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{user.name}</h1>
+                        <p className="text-sm font-medium text-gray-500 mt-1">
+                            <span className="capitalize">{user.role}</span>
+                        </p>
                     </div>
 
                     <div className="flex items-center gap-4">

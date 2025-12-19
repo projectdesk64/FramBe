@@ -30,7 +30,7 @@ export default function DashboardLayout() {
         }
     };
 
-    if (!user) return null; // Or a loading spinner
+    if (!user) return null;
 
     return (
         <div className="min-h-screen bg-gray-50/50 font-sans antialiased">

@@ -12,6 +12,8 @@ export default function DashboardFarmer() {
     const [inventory, setInventory] = useState([]);
     const [orders, setOrders] = useState([]);
 
+    const user = JSON.parse(localStorage.getItem('farmbe_user') || '{"name": "GreenEarth Estates", "role": "Farmer"}');
+
     // Local state for editing to avoid laggy inputs before save
     const [editValues, setEditValues] = useState({});
 
@@ -101,6 +103,17 @@ export default function DashboardFarmer() {
         syncData(); // Explicit refresh logic mostly redundant due to subscription but good callback
     };
 
+    const handleStatusUpdate = (orderId, newStatus) => {
+        // 1. Optimistic Update (UI)
+        const updatedOrders = orders.map(order =>
+            order.id === orderId ? { ...order, status: newStatus } : order
+        );
+        setOrders(updatedOrders);
+
+        // 2. Update persistent store (uses correct key 'farmbe_orders_v2')
+        demoStore.updateOrderStatus(orderId, newStatus);
+    };
+
     return (
         <div className="min-h-screen bg-gray-50/50 relative">
 
@@ -108,8 +121,10 @@ export default function DashboardFarmer() {
                 {/* 1. Header Section */}
                 <div className="flex justify-between items-center">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-                        <p className="text-sm font-medium text-gray-500 mt-1">GreenEarth Estates • Administrator</p>
+                        <h1 className="text-3xl font-bold tracking-tight text-gray-900">{user.name}</h1>
+                        <p className="text-sm font-medium text-gray-500 mt-1">
+                            <span className="capitalize">{user.role}</span>
+                        </p>
                     </div>
                     <div className="flex gap-3">
                         <Button
@@ -293,15 +308,21 @@ export default function DashboardFarmer() {
                                                     {order.items}
                                                 </TableCell>
                                                 <TableCell className="font-medium text-gray-900">₹{order.total?.toLocaleString()}</TableCell>
-                                                <TableCell>
-                                                    <Badge variant="outline" className={
-                                                        order.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                                                            order.status === 'Shipped' ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                                                                order.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : ''
-                                                    }>
-                                                        {order.status}
-                                                    </Badge>
-                                                </TableCell>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <select
+                                                        value={order.status}
+                                                        onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
+                                                        className={`text-xs font-semibold px-2 py-1 rounded-full border-none cursor-pointer outline-none focus:ring-2 focus:ring-emerald-500/20 ${order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
+                                                            order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
+                                                                'bg-yellow-100 text-yellow-800'
+                                                            }`}
+                                                    >
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Shipped">Shipped</option>
+                                                        <option value="Delivered">Delivered</option>
+                                                        <option value="Cancelled">Cancelled</option>
+                                                    </select>
+                                                </td>
                                             </TableRow>
                                         ))
                                     )}

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo-upscale.png';
 import { Button } from "@/components/ui/button";
 
 export default function Navbar({ variant = 'landing', user, onLogout }) {
+    const location = useLocation();
     const roleLabel = user?.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1)) : '';
 
     return (
@@ -46,18 +47,29 @@ export default function Navbar({ variant = 'landing', user, onLogout }) {
                                     </Button>
                                 </>
                             ) : (
-                                <>
-                                    <Link to="/login">
-                                        <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
-                                            Login
-                                        </Button>
-                                    </Link>
-                                    <Link to="/signup">
-                                        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                                            Signup
-                                        </Button>
-                                    </Link>
-                                </>
+                                location.pathname === '/' ? (
+                                    <div className="flex items-center gap-6">
+                                        <Link to="/login" className="text-stone-700 hover:text-stone-900 font-medium transition-colors">
+                                            Sign In
+                                        </Link>
+                                        <Link to="/signup" className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-full font-medium transition-all hover:shadow-lg hover:shadow-emerald-600/30">
+                                            Get Started
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <Link to="/login">
+                                            <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
+                                                Login
+                                            </Button>
+                                        </Link>
+                                        <Link to="/signup">
+                                            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                                                Signup
+                                            </Button>
+                                        </Link>
+                                    </>
+                                )
                             )}
                         </>
                     )}
