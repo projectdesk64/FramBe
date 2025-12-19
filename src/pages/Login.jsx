@@ -1,107 +1,98 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 
 export default function Login() {
-    const [selectedRole, setSelectedRole] = useState(null);
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+    const [error, setError] = useState('');
 
-    const roles = [
-        { id: 'farmer', title: 'Farmer', description: 'Sell your produce directly to businesses' },
-        { id: 'pg', title: 'PG Owner / Hotel Owner', description: 'Source fresh produce for your kitchen' },
-        { id: 'middleman', title: 'Middleman', description: 'Manage logistics and supply chain' },
-    ];
-
-    const handleContinue = (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
-        if (!selectedRole) {
-            alert('Please select a role to continue.');
+        setError('');
+
+        const storedUserJSON = localStorage.getItem('farmbe_user');
+
+        if (!storedUserJSON) {
+            setError("No account found. Please Sign Up first.");
             return;
         }
 
-        // For demo purposes, we store the role and navigate
-        localStorage.setItem('farmbe_role', selectedRole);
+        const storedUser = JSON.parse(storedUserJSON);
 
-        // Always store/overwrite farmbe_user for demo consistency if using "Continue"
-        const demoUser = {
-            name: 'Demo User',
-            email: email || 'demo@farmbe.com',
-            role: selectedRole
-        };
-        localStorage.setItem('farmbe_user', JSON.stringify(demoUser));
-
-        navigate(`/dashboard/${selectedRole}`);
+        // Simple validation (Demo checks only)
+        if (storedUser.email === email && storedUser.password === password) {
+            // Update role in case it drifted (though single user in this simple demo)
+            localStorage.setItem('farmbe_role', storedUser.role);
+            navigate(`/dashboard/${storedUser.role}`);
+        } else {
+            setError("Invalid email or password.");
+        }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-[calc(100vh-64px)] py-10 px-4">
-            <div className="w-full max-w-2xl space-y-8">
-                <div className="text-center space-y-2">
-                    <h1 className="text-3xl font-bold tracking-tight">Welcome to FarmBe</h1>
-                    <p className="text-muted-foreground text-lg">Choose your role to get started</p>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-4">
-                    {roles.map((role) => (
-                        <Card
-                            key={role.id}
-                            className={`cursor-pointer transition-all border-2 ${selectedRole === role.id
-                                ? 'border-primary ring-1 ring-primary'
-                                : 'hover:border-primary/50 border-transparent'
-                                }`}
-                            onClick={() => setSelectedRole(role.id)}
-                        >
-                            <CardHeader className="p-4">
-                                <CardTitle className="text-base">{role.title}</CardTitle>
-                                <CardDescription className="text-xs">{role.description}</CardDescription>
-                            </CardHeader>
-                        </Card>
-                    ))}
-                </div>
-
-                <Card className="max-w-md mx-auto">
-                    <CardHeader>
-                        <CardTitle className="text-xl">Login</CardTitle>
-                        <CardDescription>Enter your credentials to access your dashboard</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={handleContinue} className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium leading-none" htmlFor="email">Email</label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="name@example.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium leading-none" htmlFor="password">Password</label>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <Button className="w-full" type="submit">
-                                Continue as {selectedRole ? roles.find(r => r.id === selectedRole).title : '...'}
-                            </Button>
-                        </form>
-                    </CardContent>
-                </Card>
-
-                <p className="text-center text-sm text-muted-foreground">
-                    Don't have an account? <Link to="/signup" className="text-primary hover:underline">Sign up</Link>
-                </p>
+        <div className="flex items-center justify-center min-h-[calc(100vh-64px)] py-10 px-4 bg-slate-50">
+            {/* Demo Badge */}
+            <div className="absolute top-4 right-4">
+                <Badge variant="outline" className="text-muted-foreground border-dashed">
+                    Demo Mode v1.2
+                </Badge>
             </div>
+
+            <Card className="w-full max-w-md shadow-lg">
+                <CardHeader className="space-y-1">
+                    <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
+                    <CardDescription className="text-center">
+                        Enter your credentials to access your dashboard
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleLogin} className="space-y-4">
+                        {error && (
+                            <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-md">
+                                {error}
+                            </div>
+                        )}
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="name@example.com"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+
+                        <Button className="w-full bg-primary hover:bg-primary/90 mt-4" type="submit">
+                            Sign In
+                        </Button>
+                    </form>
+
+                    <div className="mt-4 text-center text-sm">
+                        Don't have an account?{" "}
+                        <Link to="/signup" className="text-primary hover:underline font-medium">
+                            Sign Up
+                        </Link>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 }

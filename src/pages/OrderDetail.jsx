@@ -20,18 +20,20 @@ L.Icon.Default.mergeOptions({
     shadowUrl: markerShadow,
 });
 
-// Demo data
-const LOCATIONS = {
-    farm_a: { id: 'farm_a', name: "Farm A (Nashik)", coords: [19.9975, 73.7898] },
-    farm_b: { id: 'farm_b', name: "Farm B (Sangamner)", coords: [19.1663, 74.2081] },
-    pg_pune: { id: 'pg_pune', name: "PG Location (Pune)", coords: [18.5913, 73.7389] },
-    hotel_pune: { id: 'hotel_pune', name: "Hotel Location (Viman Nagar)", coords: [18.5679, 73.9143] }
+// Demo data - Single Source Truth
+const DEMO_ROUTE = {
+    source: {
+        id: 'green_earth_farm',
+        name: "GreenEarth Farm (Bangalore)", // Source
+        coords: [12.9716, 77.5946]
+    },
+    destination: {
+        id: 'sai_pg_stays',
+        name: "Sai PG Stays (Mysore)", // Destination
+        coords: [12.2958, 76.6394]
+    }
 };
 
-const SOURCES = [LOCATIONS.farm_a, LOCATIONS.farm_b];
-const DESTINATIONS = [LOCATIONS.pg_pune, LOCATIONS.hotel_pune];
-
-// Custom icon for the truck
 const truckIcon = L.divIcon({
     html: '<div style="font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3))">🚚</div>',
     className: 'custom-truck-icon',
@@ -58,29 +60,23 @@ export default function OrderDetail() {
     const userRole = localStorage.getItem('farmbe_role') || 'pg';
     const isPGOwner = userRole === 'pg';
 
-    // State for location selection
-    const [sourceId, setSourceId] = useState('farm_a');
-    const [destId, setDestId] = useState('pg_pune');
-
-    // State for vehicle animation (Syncing Map and Status Bar)
-    const [truckPos, setTruckPos] = useState(null);
+    // State for vehicle animation
+    const [truckPos, setTruckPos] = useState(DEMO_ROUTE.source.coords);
     const [progress, setProgress] = useState(0);
 
-    // Derived stable data (Adheres to Guardrail 1: No re-renders on every tick for logic)
-    const source = useMemo(() => LOCATIONS[sourceId], [sourceId]);
-    const destination = useMemo(() => LOCATIONS[destId], [destId]);
+    // Stable source/dest
+    const source = DEMO_ROUTE.source;
+    const destination = DEMO_ROUTE.destination;
 
-    // Calculate map bounds (Only updates when selection changes)
+    // Calculate map bounds
     const bounds = useMemo(() => {
         return L.latLngBounds([source.coords, destination.coords]);
     }, [source, destination]);
 
-    // Animation Effect (Adheres to Guardrail 1: Only starts when From/To changes)
+    // Animation Effect
     useEffect(() => {
-        if (!source || !destination) return;
-
         let animationFrame;
-        const duration = 10000; // 10 seconds for one trip
+        const duration = 12000; // 12 seconds for the journey
         const startTime = performance.now();
 
         const animate = (currentTime) => {
@@ -89,7 +85,7 @@ export default function OrderDetail() {
 
             setProgress(p);
 
-            // Straight polyline calculation (Adheres to Guardrail 2)
+            // Straight polyline calculation
             const lat = source.coords[0] + (destination.coords[0] - source.coords[0]) * p;
             const lng = source.coords[1] + (destination.coords[1] - source.coords[1]) * p;
 
@@ -99,7 +95,7 @@ export default function OrderDetail() {
 
         animationFrame = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationFrame);
-    }, [sourceId, destId]); // Explicit stable dependencies
+    }, []); // Run once on mount
 
     const headerMessage = isPGOwner
         ? "Your order is on the way"
@@ -145,32 +141,18 @@ export default function OrderDetail() {
                             <div className="space-y-4 pt-2">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-muted-foreground">Source (From)</label>
-                                    {isPGOwner ? (
-                                        <select
-                                            value={sourceId}
-                                            onChange={(e) => setSourceId(e.target.value)}
-                                            className="w-full p-2 rounded-md border bg-background text-sm focus:ring-1 focus:ring-primary outline-none"
-                                        >
-                                            {SOURCES.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-                                        </select>
-                                    ) : (
-                                        <p className="font-medium p-2 border rounded-md bg-muted/50">{source.name}</p>
-                                    )}
+                                    <p className="font-medium p-2 border rounded-md bg-muted/50 flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                                        {source.name}
+                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-muted-foreground">Destination (To)</label>
-                                    {isPGOwner ? (
-                                        <select
-                                            value={destId}
-                                            onChange={(e) => setDestId(e.target.value)}
-                                            className="w-full p-2 rounded-md border bg-background text-sm focus:ring-1 focus:ring-primary outline-none"
-                                        >
-                                            {DESTINATIONS.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
-                                        </select>
-                                    ) : (
-                                        <p className="font-medium p-2 border rounded-md bg-muted/50">{destination.name}</p>
-                                    )}
+                                    <p className="font-medium p-2 border rounded-md bg-muted/50 flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                                        {destination.name}
+                                    </p>
                                 </div>
                             </div>
                         </CardContent>
