@@ -71,9 +71,9 @@ const DashboardPG = () => {
             setTimeout(() => {
                 setIsCartOpen(false);
                 setOrderPlaced(null);
-                // Redirect to Order Status Tracking Page
-                window.location.href = '/order-status';
-            }, 1500);
+                // Redirect to Live Tracking Page with Order ID
+                window.location.href = `/eta?orderId=${order.id}`;
+            }, 1000);
         } else {
             alert("Order failed! Some items may be out of stock.");
         }

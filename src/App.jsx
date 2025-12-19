@@ -10,6 +10,7 @@ import OrderStatus from './pages/OrderStatus';
 import Profile from './pages/Profile';
 import Navbar from './components/ui/Navbar';
 import Footer from './components/ui/Footer';
+import ETA from './pages/ETA';
 
 // Simple Placeholder for "Coming Soon" pages
 const PlaceholderPage = ({ title }) => (
@@ -76,6 +77,7 @@ function App() {
           <Route path="/dashboard/pg" element={<DashboardPG />} />
           <Route path="/dashboard/profile" element={<Profile />} />
           <Route path="/order-status" element={<OrderStatus />} />
+          <Route path="/eta" element={<ETA />} />
         </Route>
       </Routes>
     </BrowserRouter>

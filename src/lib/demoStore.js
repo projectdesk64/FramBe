@@ -6,7 +6,7 @@ export const INITIAL_INVENTORY = [
         stock: 500,
         unit: "kg",
         category: "Vegetables",
-        image: "https://images.unsplash.com/photo-1546470427-227c73699412?auto=format&fit=crop&w=800&q=80"
+        image: "https://images.unsplash.com/photo-1582284540020-8acbe03f4924?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     },
     {
         id: 2,
