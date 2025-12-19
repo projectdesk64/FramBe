@@ -39,8 +39,13 @@ export default function DashboardFarmer() {
     }, []);
 
     // KPIs
-    const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0);
-    const activeOrdersCount = orders.length;
+    // KPIs
+    const totalRevenue = orders.reduce((sum, order) =>
+        order.status !== 'Cancelled' ? sum + (order.total || 0) : sum, 0
+    );
+    const activeOrdersCount = orders.filter(o =>
+        o.status === 'Pending' || o.status === 'Shipped'
+    ).length;
     const lowStockCount = inventory.filter(i => i.stock < 100).length;
 
     // Handlers

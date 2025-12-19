@@ -30,8 +30,6 @@ const DashboardPG = () => {
         setCart((prev) => {
             const existing = prev.find((item) => item.id === product.id);
             if (existing) {
-                // Check if we have enough stock locally (though store check happens at checkout)
-                // For simple UX, let's limit max to current stock
                 if (existing.quantity < product.stock) {
                     return prev.map((item) =>
                         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
@@ -119,18 +117,6 @@ const DashboardPG = () => {
                         </Button>
                     </div>
                 </div>
-
-                {/* Banner */}
-                <div className="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-2xl p-8 mb-10 text-white shadow-lg overflow-hidden relative">
-                    <div className="relative z-10">
-                        <h2 className="text-3xl font-bold mb-2 tracking-tight">Fresh Directly From Farm</h2>
-                        <p className="opacity-90 max-w-xl text-emerald-50 text-lg">Premium quality vegetables sourced daily at wholesale prices for your kitchen.</p>
-                    </div>
-                    {/* Decorative Background Pattern */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-                    <div className="absolute bottom-0 right-20 w-32 h-32 bg-yellow-400/20 rounded-full blur-2xl pointer-events-none"></div>
-                </div>
-
                 <div className="mb-6 flex items-center justify-between">
                     <h3 className="text-xl font-bold text-gray-800">Available Produce</h3>
                 </div>

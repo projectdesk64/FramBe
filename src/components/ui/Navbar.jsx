@@ -48,12 +48,16 @@ export default function Navbar({ variant = 'landing', user, onLogout }) {
                                 </>
                             ) : (
                                 location.pathname === '/' ? (
-                                    <div className="flex items-center gap-6">
-                                        <Link to="/login" className="text-stone-700 hover:text-stone-900 font-medium transition-colors">
-                                            Sign In
+                                    <div className="flex items-center gap-4">
+                                        <Link to="/login">
+                                            <Button variant="ghost" className="text-stone-700 font-medium">
+                                                Sign In
+                                            </Button>
                                         </Link>
-                                        <Link to="/signup" className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-full font-medium transition-all hover:shadow-lg hover:shadow-emerald-600/30">
-                                            Get Started
+                                        <Link to="/signup">
+                                            <Button className="font-medium">
+                                                Get Started
+                                            </Button>
                                         </Link>
                                     </div>
                                 ) : (
@@ -64,7 +68,7 @@ export default function Navbar({ variant = 'landing', user, onLogout }) {
                                             </Button>
                                         </Link>
                                         <Link to="/signup">
-                                            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                                            <Button>
                                                 Signup
                                             </Button>
                                         </Link>

@@ -74,6 +74,7 @@ function App() {
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard/farmer" element={<DashboardFarmer />} />
           <Route path="/dashboard/pg" element={<DashboardPG />} />
+          <Route path="/dashboard/profile" element={<Profile />} />
           <Route path="/order-status" element={<OrderStatus />} />
         </Route>
       </Routes>

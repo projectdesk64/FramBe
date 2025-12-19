@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import heroVideo from '../assets/Logo_Video.mp4';
 
+import { Button } from "@/components/ui/button";
+
 // --- DATA: TRUST STRIP STATS ---
 const stats = [
     { icon: Users, label: 'Active Farmers', value: '500+' },
@@ -71,19 +73,17 @@ export default function Landing() {
                             Bypassing the middleman to connect 500+ local farmers with your kitchen. Peak freshness, fair prices.
                         </p>
                         <div className="flex flex-col sm:flex-row items-start gap-4 animate-fade-in-up-delay-2">
-                            <Link
-                                to="/signup"
-                                className="group inline-flex h-12 items-center justify-center overflow-hidden rounded-xl bg-emerald-600 px-8 font-medium text-white shadow-lg transition-all duration-300 hover:bg-emerald-700 hover:translate-y-[-2px] focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
-                            >
-                                <span className="mr-2">Start Shopping</span>
-                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                            </Link>
-                            <Link
-                                to="/about"
-                                className="inline-flex h-12 items-center justify-center rounded-xl px-8 font-medium text-stone-600 hover:bg-stone-200/50 transition-colors"
-                            >
-                                How it Works
-                            </Link>
+                            <Button asChild size="lg" className="h-14 text-lg px-10 shadow-xl hover:shadow-emerald-600/40">
+                                <Link to="/signup">
+                                    <span className="mr-2">Start Shopping</span>
+                                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                                </Link>
+                            </Button>
+                            <Button asChild variant="ghost" size="lg" className="h-14 text-lg px-8 text-stone-600 hover:bg-stone-200/50">
+                                <Link to="/about">
+                                    How it Works
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -151,24 +151,20 @@ export default function Landing() {
 
                         {/* Toggle Buttons */}
                         <div className="inline-flex items-center bg-stone-100 rounded-full p-1.5 border border-stone-200">
-                            <button
+                            <Button
                                 onClick={() => setRole('buyer')}
-                                className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${role === 'buyer'
-                                    ? 'bg-emerald-600 text-white shadow-lg'
-                                    : 'text-stone-600 hover:text-stone-900'
-                                    }`}
+                                variant={role === 'buyer' ? 'default' : 'ghost'}
+                                className={`rounded-full transition-all duration-300 ${role === 'buyer' ? 'shadow-md' : 'text-stone-600 hover:text-stone-900 hover:bg-transparent'}`}
                             >
                                 I am a Buyer
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                                 onClick={() => setRole('farmer')}
-                                className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${role === 'farmer'
-                                    ? 'bg-emerald-600 text-white shadow-lg'
-                                    : 'text-stone-600 hover:text-stone-900'
-                                    }`}
+                                variant={role === 'farmer' ? 'default' : 'ghost'}
+                                className={`rounded-full transition-all duration-300 ${role === 'farmer' ? 'shadow-md' : 'text-stone-600 hover:text-stone-900 hover:bg-transparent'}`}
                             >
                                 I am a Farmer
-                            </button>
+                            </Button>
                         </div>
                     </motion.div>
 
