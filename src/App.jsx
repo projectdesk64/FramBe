@@ -1,50 +1,80 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/ui/Navbar';
-import Footer from './components/Footer';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import DashboardPG from './pages/DashboardPG';
 import DashboardFarmer from './pages/DashboardFarmer';
-import DashboardMiddleman from './pages/DashboardMiddleman';
-import DashboardLayout from './components/DashboardLayout';
-import Orders from './pages/Orders';
-import OrderDetail from './pages/OrderDetail';
-import Payments from './pages/Payments';
-import ETA from './pages/ETA';
-import Profile from './pages/Profile';
+import DashboardPG from './pages/DashboardPG';
+import DashboardLayout from './layouts/DashboardLayout';
 import OrderStatus from './pages/OrderStatus';
+import Profile from './pages/Profile';
+import Navbar from './components/ui/Navbar';
+import Footer from './components/ui/Footer';
+
+// Simple Placeholder for "Coming Soon" pages
+const PlaceholderPage = ({ title }) => (
+  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+    <h1 className="text-4xl font-bold text-stone-800 mb-4">{title}</h1>
+    <p className="text-lg text-stone-600">We are working hard to bring you this feature. Stay tuned!</p>
+  </div>
+);
+
+// Layout for public pages that need the standard Navbar
+const AppLayout = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('farmbe_user');
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch (e) {
+        console.error("Failed to parse user", e);
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('farmbe_user');
+    localStorage.removeItem('farmbe_role');
+    setUser(null);
+    window.location.href = '/';
+  };
+
+  return (
+    <div className="min-h-screen bg-stone-50 font-sans text-stone-900">
+      <Navbar variant="landing" user={user} onLogout={handleLogout} />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+};
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={
-          <div className="relative flex min-h-screen flex-col bg-background font-sans antialiased text-foreground">
-            <Navbar variant="landing" />
-            <main className="flex-1">
-              <Landing />
-            </main>
-            <Footer />
-          </div>
-        } />
-
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        <Route path="/order-status" element={<OrderStatus />} />
+        {/* Public/General Routes with Navbar */}
+        <Route element={<AppLayout />}>
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/about" element={<PlaceholderPage title="Our Mission" />} />
+          <Route path="/contact" element={<PlaceholderPage title="Contact Us" />} />
+          <Route path="/farmers" element={<PlaceholderPage title="Our Farmers" />} />
+          <Route path="/requests" element={<PlaceholderPage title="Marketplace" />} />
+          <Route path="/privacy" element={<PlaceholderPage title="Privacy Policy" />} />
+        </Route>
 
-        <Route path="dashboard" element={<DashboardLayout />}>
-          <Route index element={<Navigate to="pg" replace />} />
-          <Route path="pg" element={<DashboardPG />} />
-          <Route path="farmer" element={<DashboardFarmer />} />
-          <Route path="middleman" element={<DashboardMiddleman />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="orders/:orderId" element={<OrderDetail />} />
-          <Route path="payments" element={<Payments />} />
-          <Route path="eta" element={<ETA />} />
+        {/* Dashboards - Wrapped in Layout */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard/farmer" element={<DashboardFarmer />} />
+          <Route path="/dashboard/pg" element={<DashboardPG />} />
+          <Route path="/order-status" element={<OrderStatus />} />
         </Route>
       </Routes>
     </BrowserRouter>

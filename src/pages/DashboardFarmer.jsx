@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { demoStore } from '@/lib/demoStore';
-import { Package, IndianRupee, AlertTriangle, RefreshCw } from "lucide-react";
+import { Package, IndianRupee, AlertTriangle, RefreshCw, Trash2 } from "lucide-react";
 
 export default function DashboardFarmer() {
     const [inventory, setInventory] = useState([]);
@@ -14,6 +14,16 @@ export default function DashboardFarmer() {
 
     // Local state for editing to avoid laggy inputs before save
     const [editValues, setEditValues] = useState({});
+
+    // Add Product Modal State
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [newProduct, setNewProduct] = useState({
+        name: "",
+        category: "Vegetables",
+        price: "",
+        stock: "",
+        image: ""
+    });
 
     const syncData = () => {
         setInventory(demoStore.getInventory());
@@ -60,12 +70,39 @@ export default function DashboardFarmer() {
             });
 
             // Ideally use a toast here
-            // alert("Stock Updated"); // Removed for cleaner UI
         }
     };
 
+    const handleDelete = (id) => {
+        if (window.confirm("Delete this item permanently?")) {
+            const updatedList = demoStore.deleteProduct(id);
+            setInventory(updatedList);
+            alert("Item Deleted");
+        }
+    };
+
+    const handleAddProductSubmit = (e) => {
+        e.preventDefault();
+        if (!newProduct.name || !newProduct.price || !newProduct.stock) {
+            alert("Please fill in all required fields");
+            return;
+        }
+
+        demoStore.addProduct(newProduct);
+        alert("Product Added Successfully");
+        setIsAddModalOpen(false);
+        setNewProduct({
+            name: "",
+            category: "Vegetables",
+            price: "",
+            stock: "",
+            image: ""
+        });
+        syncData(); // Explicit refresh logic mostly redundant due to subscription but good callback
+    };
+
     return (
-        <div className="min-h-screen bg-gray-50/50">
+        <div className="min-h-screen bg-gray-50/50 relative">
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
                 {/* 1. Header Section */}
@@ -74,9 +111,17 @@ export default function DashboardFarmer() {
                         <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
                         <p className="text-sm font-medium text-gray-500 mt-1">GreenEarth Estates • Administrator</p>
                     </div>
-                    <Button variant="outline" size="icon" onClick={syncData} title="Refresh Data">
-                        <RefreshCw className="h-4 w-4" />
-                    </Button>
+                    <div className="flex gap-3">
+                        <Button
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                            onClick={() => setIsAddModalOpen(true)}
+                        >
+                            + Add Product
+                        </Button>
+                        <Button variant="outline" size="icon" onClick={syncData} title="Refresh Data">
+                            <RefreshCw className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </div>
 
                 {/* 2. KPI Section */}
@@ -190,15 +235,24 @@ export default function DashboardFarmer() {
                                                     )}
                                                 </TableCell>
                                                 <TableCell className="text-right">
-                                                    {isModified && (
+                                                    <div className="flex justify-end items-center gap-2">
+                                                        {isModified && (
+                                                            <Button
+                                                                size="sm"
+                                                                className="bg-gray-900 text-white hover:bg-black"
+                                                                onClick={() => saveProduct(item)}
+                                                            >
+                                                                Save
+                                                            </Button>
+                                                        )}
                                                         <Button
-                                                            size="sm"
-                                                            className="bg-gray-900 text-white hover:bg-black"
-                                                            onClick={() => saveProduct(item)}
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleDelete(item.id)}
                                                         >
-                                                            Save
+                                                            <Trash2 className="h-4 w-4 text-red-500" />
                                                         </Button>
-                                                    )}
+                                                    </div>
                                                 </TableCell>
                                             </TableRow>
                                         );
@@ -257,6 +311,104 @@ export default function DashboardFarmer() {
                     </TabsContent>
                 </Tabs>
             </div>
+
+            {/* Add Product Modal Overlay */}
+            {isAddModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md animate-in fade-in zoom-in-95 duration-200">
+                        <div className="p-6 space-y-4">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-xl font-bold text-gray-900">Add New Inventory</h2>
+                                <button
+                                    onClick={() => setIsAddModalOpen(false)}
+                                    className="text-gray-400 hover:text-gray-500 text-2xl leading-none"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleAddProductSubmit} className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Name</label>
+                                    <Input
+                                        required
+                                        placeholder="e.g. Fresh Spinach"
+                                        value={newProduct.name}
+                                        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                                        className="border-stone-200 focus:ring-emerald-500"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Category</label>
+                                    <select
+                                        className="flex h-10 w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        value={newProduct.category}
+                                        onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+                                    >
+                                        <option value="Vegetables">Vegetables</option>
+                                        <option value="Fruits">Fruits</option>
+                                        <option value="Grains">Grains</option>
+                                    </select>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Price (₹/kg)</label>
+                                        <Input
+                                            required
+                                            type="number"
+                                            placeholder="40"
+                                            value={newProduct.price}
+                                            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                                            className="border-stone-200 focus:ring-emerald-500"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Stock (kg)</label>
+                                        <Input
+                                            required
+                                            type="number"
+                                            placeholder="100"
+                                            value={newProduct.stock}
+                                            onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
+                                            className="border-stone-200 focus:ring-emerald-500"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Image URL (Optional)</label>
+                                    <Input
+                                        placeholder="https://..."
+                                        value={newProduct.image}
+                                        onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
+                                        className="border-stone-200 focus:ring-emerald-500"
+                                    />
+                                    <p className="text-xs text-gray-500">Leave empty for default vegetable image</p>
+                                </div>
+
+                                <div className="pt-4 flex gap-3">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        className="w-full"
+                                        onClick={() => setIsAddModalOpen(false)}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                                    >
+                                        Save Product
+                                    </Button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -56,6 +56,12 @@ export const INITIAL_ORDERS = [
     }
 ];
 
+export const FALLBACK_IMAGES = [
+    "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80", // Vegetable Basket
+    "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&q=80", // Fresh Greens
+    "https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&q=80"  // Mixed Roots
+];
+
 const INVENTORY_KEY = "farmbe_inventory_v2";
 const ORDERS_KEY = "farmbe_orders_v2";
 
@@ -188,6 +194,46 @@ class DemoStore {
         this.updateOrders(orders);
 
         return newOrder;
+    }
+
+    addProduct(product) {
+        const inventory = this.getInventory();
+        const newId = Date.now();
+
+        let imageUrl = product.image;
+        if (!imageUrl) {
+            const randomIndex = Math.floor(Math.random() * FALLBACK_IMAGES.length);
+            imageUrl = FALLBACK_IMAGES[randomIndex];
+        }
+
+        const newProduct = {
+            id: newId,
+            name: product.name,
+            category: product.category || "Vegetables",
+            price: Number(product.price),
+            stock: Number(product.stock),
+            unit: product.unit || "kg",
+            image: imageUrl
+        };
+
+        inventory.push(newProduct);
+        localStorage.setItem(INVENTORY_KEY, JSON.stringify(inventory));
+
+        // Dispatch events as requested for sync and immediate update
+        window.dispatchEvent(new Event("storage"));
+        this.notify();
+
+        return inventory;
+    }
+
+    deleteProduct(id) {
+        let inventory = this.getInventory();
+        inventory = inventory.filter(p => p.id !== id);
+        localStorage.setItem(INVENTORY_KEY, JSON.stringify(inventory));
+
+        window.dispatchEvent(new Event("storage"));
+        this.notify();
+        return inventory;
     }
 
     subscribe(callback) {

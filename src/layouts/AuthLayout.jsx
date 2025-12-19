@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Navbar from '../components/ui/Navbar';
+import Footer from '../components/ui/Footer';
 
 export default function AuthLayout({ children }) {
     return (
@@ -16,13 +17,7 @@ export default function AuthLayout({ children }) {
             </main>
 
             {/* Footer */}
-            <footer className="bg-white border-t border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-center sm:justify-between">
-                    <p className="text-sm text-gray-400">
-                        © {new Date().getFullYear()} FarmBe. All rights reserved.
-                    </p>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }

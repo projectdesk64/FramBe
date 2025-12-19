@@ -4,7 +4,7 @@
 @layer base {
   :root {
     /* Background: Stone-50 (Warm White) #fafaf9 */
-    --background: 60 9% 98%; 
+    --background: 60 9% 98%;
     /* Foreground: Stone-900 (Warm Black) #1c1917 */
     --foreground: 24 10% 10%;
 
@@ -26,7 +26,7 @@
 
     /* Muted: Stone-100 #f5f5f4 */
     --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%; 
+    --muted-foreground: 25 5.3% 44.7%;
 
     /* Accent: Amber-100/Emerald-50 or clean Stone-100 */
     --accent: 60 4.8% 95.9%;
@@ -40,7 +40,7 @@
     --border: 20 6% 90%;
     /* Input: Stone-200 */
     --input: 20 6% 90%;
-    /* Ring: Emerald-500 or Stone-400? Let's go with global ring matches text/primary */
+    /* Ring: Emerald-500 */
     --ring: 160 84% 39%;
 
     --radius: 0.5rem;
@@ -60,7 +60,7 @@
     --popover: 24 10% 10%;
     --popover-foreground: 60 9% 98%;
 
-    /* Primary: Emerald-400 (Slightly lighter for dark mode) */
+    /* Primary: Emerald-400 */
     --primary: 158 64% 52%;
     --primary-foreground: 24 5% 6%;
 
@@ -87,15 +87,19 @@
     /* Ring: Stone-400 */
     --ring: 24 5% 64%;
   }
-}
 
-@layer base {
   * {
     border-color: hsl(var(--border));
   }
+}
 
+@layer base {
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    /* Use the new aliased 'gray-50' (which is Stone-50) */
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 }

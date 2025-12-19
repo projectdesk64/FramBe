@@ -30,16 +30,35 @@ export default function Navbar({ variant = 'landing', user, onLogout }) {
                 <div className="flex items-center space-x-4">
                     {variant === 'landing' && (
                         <>
-                            <Link to="/login">
-                                <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
-                                    Login
-                                </Button>
-                            </Link>
-                            <Link to="/signup">
-                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                                    Signup
-                                </Button>
-                            </Link>
+                            {user ? (
+                                <>
+                                    <Link to={`/dashboard/${user.role}`}>
+                                        <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
+                                            Dashboard
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        variant="outline"
+                                        className="text-gray-600 hover:text-gray-900 border-gray-200"
+                                        onClick={onLogout}
+                                    >
+                                        Logout
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    <Link to="/login">
+                                        <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
+                                            Login
+                                        </Button>
+                                    </Link>
+                                    <Link to="/signup">
+                                        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                                            Signup
+                                        </Button>
+                                    </Link>
+                                </>
+                            )}
                         </>
                     )}
 
