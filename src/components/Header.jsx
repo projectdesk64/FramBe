@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { logout } from '../lib/auth';
+import logo from '../assets/logo-upscale.png';
 
 export default function Header() {
     const role = localStorage.getItem('farmbe_role');
@@ -13,7 +14,7 @@ export default function Header() {
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-14 items-center pl-4">
                 <Link to="/" className="mr-6 flex items-center space-x-2">
-                    <span className="font-bold text-xl">FramBe</span>
+                    <img src={logo} alt="FramBe" className="h-8 w-auto object-contain" />
                 </Link>
                 <nav className="flex items-center space-x-6 text-sm font-medium">
                     {/* Add global nav links here if needed in future */}

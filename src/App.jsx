@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import PublicLayout from './components/PublicLayout';
+import Navbar from './components/ui/Navbar';
+import Footer from './components/Footer';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -13,16 +14,26 @@ import OrderDetail from './pages/OrderDetail';
 import Payments from './pages/Payments';
 import ETA from './pages/ETA';
 import Profile from './pages/Profile';
+import OrderStatus from './pages/OrderStatus';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<PublicLayout />}>
-          <Route index element={<Landing />} />
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<Signup />} />
-        </Route>
+        <Route path="/" element={
+          <div className="relative flex min-h-screen flex-col bg-background font-sans antialiased text-foreground">
+            <Navbar variant="landing" />
+            <main className="flex-1">
+              <Landing />
+            </main>
+            <Footer />
+          </div>
+        } />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        <Route path="/order-status" element={<OrderStatus />} />
 
         <Route path="dashboard" element={<DashboardLayout />}>
           <Route index element={<Navigate to="pg" replace />} />

@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import colors from 'tailwindcss/colors';
+
 export default {
     darkMode: 'class',
     content: [
@@ -8,6 +10,13 @@ export default {
     theme: {
         extend: {
             colors: {
+                // Neutral (Warm Grey) - Rationale: Agriculture needs to feel earthy.
+                gray: colors.stone,
+                // Primary (Forest Emerald) aliases
+                emerald: colors.emerald,
+                // Accents
+                amber: colors.amber,
+
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
                 ring: "hsl(var(--ring))",

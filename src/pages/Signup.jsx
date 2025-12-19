@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tractor, Store, Check } from 'lucide-react';
+import { initStore } from "@/lib/demoStore";
+import AuthLayout from '../layouts/AuthLayout';
 
 export default function Signup() {
     const navigate = useNavigate();
@@ -22,93 +24,145 @@ export default function Signup() {
             return;
         }
 
-        // 1. Create User Object
         const newUser = {
             name: formData.name,
             email: formData.email,
-            password: formData.password, // In a real app, hash this!
+            password: formData.password,
             role: formData.role
         };
 
-        // 2. Save to LocalStorage (Simulated Backend)
         localStorage.setItem('farmbe_user', JSON.stringify(newUser));
         localStorage.setItem('farmbe_role', formData.role);
 
-        // 3. Redirect
+        initStore();
         navigate(`/dashboard/${formData.role}`);
     };
 
-    return (
-        <div className="flex items-center justify-center min-h-[calc(10vh-64px)] py-10 px-4 bg-slate-50">
-            <Card className="w-full max-w-md shadow-lg">
-                <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
-                    <CardDescription className="text-center">
-                        Enter your information to get started with FarmBe
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSignup} className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Full Name</Label>
-                            <Input
-                                id="name"
-                                placeholder="John Doe"
-                                required
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="name@example.com"
-                                required
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                required
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="role">I am a...</Label>
-                            <select
-                                id="role"
-                                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                value={formData.role}
-                                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                required
-                            >
-                                <option value="" disabled>Select your role</option>
-                                <option value="farmer">Farmer (Owner)</option>
-                                <option value="middleman">Logistics Manager</option>
-                                <option value="pg">PG / Hotel Owner</option>
-                            </select>
-                        </div>
-
-                        <Button className="w-full bg-primary hover:bg-primary/90 mt-4" type="submit">
-                            Sign Up
-                        </Button>
-                    </form>
-
-                    <div className="mt-4 text-center text-sm">
-                        Already have an account?{" "}
-                        <Link to="/login" className="text-primary hover:underline font-medium">
-                            Sign In
-                        </Link>
+    const RoleCard = ({ value, label, icon: Icon, description }) => {
+        const isSelected = formData.role === value;
+        return (
+            <div
+                onClick={() => setFormData({ ...formData, role: value })}
+                className={`group relative cursor-pointer rounded-xl border p-4 transition-all duration-200 ${isSelected
+                    ? 'border-emerald-600 bg-emerald-50 ring-2 ring-emerald-500/20'
+                    : 'border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50'
+                    }`}
+            >
+                {isSelected && (
+                    <div className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg">
+                        <Check size={12} strokeWidth={4} />
                     </div>
-                </CardContent>
-            </Card>
-        </div>
+                )}
+                <div className="flex items-center gap-3">
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors ${isSelected ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-emerald-100 group-hover:text-emerald-600'
+                        }`}>
+                        <Icon size={20} />
+                    </div>
+                    <div>
+                        <h3 className={`text-sm font-bold transition-colors ${isSelected ? 'text-emerald-900' : 'text-gray-700'
+                            }`}>
+                            {label}
+                        </h3>
+                        <p className={`text-[10px] leading-tight transition-colors ${isSelected ? 'text-emerald-700/70' : 'text-gray-500'
+                            }`}>
+                            {description}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <AuthLayout>
+            <div className="w-full max-w-[440px] bg-white rounded-2xl shadow-xl p-8 animate-in fade-in zoom-in duration-300">
+                {/* Header */}
+                <div className="mb-8">
+                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">
+                        Create Account
+                    </h1>
+                    <p className="text-sm text-gray-500">
+                        Choose your role and set up your profile.
+                    </p>
+                </div>
+
+                <form onSubmit={handleSignup} className="space-y-6">
+                    {/* Role Selection */}
+                    <div className="flex flex-col gap-2">
+                        <Label className="text-sm font-medium text-gray-700">I am a...</Label>
+                        <div className="grid grid-cols-2 gap-4">
+                            <RoleCard
+                                value="farmer"
+                                label="Farmer"
+                                icon={Tractor}
+                                description="Sell produce."
+                            />
+                            <RoleCard
+                                value="pg"
+                                label="Buyer"
+                                icon={Store}
+                                description="Source produce."
+                            />
+                        </div>
+                    </div>
+
+                    {/* Name Input */}
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="name" className="text-sm font-medium text-gray-700">Full Name</Label>
+                        <Input
+                            id="name"
+                            placeholder="John Doe"
+                            className="h-11 border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                            required
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        />
+                    </div>
+
+                    {/* Email Input */}
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder="name@example.com"
+                            className="h-11 border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                            required
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        />
+                    </div>
+
+                    {/* Password Input */}
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="password" title="password" className="text-sm font-medium text-gray-700">Password</Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            className="h-11 border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                            required
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        />
+                    </div>
+
+                    {/* Submit Button */}
+                    <Button
+                        className="h-11 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg"
+                        type="submit"
+                    >
+                        Create Account
+                    </Button>
+                </form>
+
+                {/* Footer Links */}
+                <p className="mt-8 text-center text-sm text-gray-500">
+                    Already have an account?{" "}
+                    <Link to="/login" className="font-semibold text-emerald-600 hover:text-emerald-500">
+                        Sign In
+                    </Link>
+                </p>
+            </div>
+        </AuthLayout>
     );
 }
