@@ -27,9 +27,19 @@ export default function DashboardFarmer() {
         image: ""
     });
 
+    const [isRefreshing, setIsRefreshing] = useState(false);
+
     const syncData = () => {
         setInventory(demoStore.getInventory());
         setOrders(demoStore.getOrders());
+    };
+
+    const handleRefresh = async () => {
+        setIsRefreshing(true);
+        // Simulate network delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 800));
+        syncData();
+        setIsRefreshing(false);
     };
 
     useEffect(() => {
@@ -138,8 +148,8 @@ export default function DashboardFarmer() {
                         >
                             + Add Product
                         </Button>
-                        <Button variant="outline" size="icon" onClick={syncData} title="Refresh Data" className="rounded-full h-10 w-10 border-gray-200 hover:bg-gray-50 hover:text-emerald-600 transition-colors">
-                            <RefreshCw className="h-4 w-4" />
+                        <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing} title="Refresh Data" className="rounded-full h-10 w-10 border-gray-200 hover:bg-gray-50 hover:text-emerald-600 transition-colors">
+                            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                         </Button>
                     </div>
                 </div>
@@ -196,13 +206,13 @@ export default function DashboardFarmer() {
                     <TabsList className="bg-white border rounded-full p-1 h-12 inline-flex shadow-sm">
                         <TabsTrigger
                             value="inventory"
-                            className="rounded-full px-6 py-2 text-sm font-medium transition-all data-[state=active]:bg-gray-900 data-[state=active]:text-white data-[state=active]:shadow-md"
+                            className="rounded-full px-6 py-2 text-sm font-medium transition-all data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-md"
                         >
                             Inventory
                         </TabsTrigger>
                         <TabsTrigger
                             value="orders"
-                            className="rounded-full px-6 py-2 text-sm font-medium transition-all data-[state=active]:bg-gray-900 data-[state=active]:text-white data-[state=active]:shadow-md"
+                            className="rounded-full px-6 py-2 text-sm font-medium transition-all data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-md"
                         >
                             Orders
                         </TabsTrigger>
@@ -215,12 +225,12 @@ export default function DashboardFarmer() {
                                 <Table>
                                     <TableHeader className="bg-gray-50/50 border-b border-gray-100">
                                         <TableRow className="hover:bg-transparent">
-                                            <TableHead className="w-[120px] py-5 pl-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Image</TableHead>
-                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Product</TableHead>
-                                            <TableHead className="text-right py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Price (₹/kg)</TableHead>
-                                            <TableHead className="text-right py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Stock (kg)</TableHead>
-                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Status</TableHead>
-                                            <TableHead className="text-right py-5 pr-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Action</TableHead>
+                                            <TableHead className="w-[10%] py-5 pl-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Image</TableHead>
+                                            <TableHead className="w-[30%] py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Product</TableHead>
+                                            <TableHead className="w-[15%] text-right py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Price (₹/kg)</TableHead>
+                                            <TableHead className="w-[15%] text-right py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Stock (kg)</TableHead>
+                                            <TableHead className="w-[15%] py-5 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Status</TableHead>
+                                            <TableHead className="w-[15%] text-right py-5 pr-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Action</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -317,12 +327,12 @@ export default function DashboardFarmer() {
                                 <Table>
                                     <TableHeader className="bg-gray-50/50 border-b border-gray-100">
                                         <TableRow className="hover:bg-transparent">
-                                            <TableHead className="py-5 pl-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Order ID</TableHead>
-                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Date</TableHead>
-                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Customer</TableHead>
-                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Items</TableHead>
-                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Total</TableHead>
-                                            <TableHead className="py-5 pr-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Status</TableHead>
+                                            <TableHead className="w-[15%] py-5 pl-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Order ID</TableHead>
+                                            <TableHead className="w-[15%] py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Date</TableHead>
+                                            <TableHead className="w-[20%] py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Customer</TableHead>
+                                            <TableHead className="w-[25%] py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Items</TableHead>
+                                            <TableHead className="w-[10%] py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Total</TableHead>
+                                            <TableHead className="w-[15%] py-5 pr-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Status</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
