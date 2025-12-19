@@ -124,7 +124,7 @@ export default function DashboardFarmer() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
                 {/* 1. Header Section */}
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center pb-2">
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight text-gray-900">{user.name}</h1>
                         <p className="text-sm font-medium text-gray-500 mt-1">
@@ -133,12 +133,12 @@ export default function DashboardFarmer() {
                     </div>
                     <div className="flex gap-3">
                         <Button
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg shadow-emerald-200 px-6 transition-transform hover:scale-105"
                             onClick={() => setIsAddModalOpen(true)}
                         >
                             + Add Product
                         </Button>
-                        <Button variant="outline" size="icon" onClick={syncData} title="Refresh Data">
+                        <Button variant="outline" size="icon" onClick={syncData} title="Refresh Data" className="rounded-full h-10 w-10 border-gray-200 hover:bg-gray-50 hover:text-emerald-600 transition-colors">
                             <RefreshCw className="h-4 w-4" />
                         </Button>
                     </div>
@@ -192,148 +192,185 @@ export default function DashboardFarmer() {
                 </div>
 
                 {/* 3. Main Content (The Tabs) */}
-                <Tabs defaultValue="inventory" className="w-full">
-                    <TabsList className="bg-white border rounded-lg p-1 mb-6">
-                        <TabsTrigger value="inventory" className="data-[state=active]:bg-gray-100">Inventory</TabsTrigger>
-                        <TabsTrigger value="orders" className="data-[state=active]:bg-gray-100">Orders</TabsTrigger>
+                <Tabs defaultValue="inventory" className="w-full space-y-6">
+                    <TabsList className="bg-white border rounded-full p-1 h-12 inline-flex shadow-sm">
+                        <TabsTrigger
+                            value="inventory"
+                            className="rounded-full px-6 py-2 text-sm font-medium transition-all data-[state=active]:bg-gray-900 data-[state=active]:text-white data-[state=active]:shadow-md"
+                        >
+                            Inventory
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="orders"
+                            className="rounded-full px-6 py-2 text-sm font-medium transition-all data-[state=active]:bg-gray-900 data-[state=active]:text-white data-[state=active]:shadow-md"
+                        >
+                            Orders
+                        </TabsTrigger>
                     </TabsList>
 
                     {/* Tab 1: Inventory */}
-                    <TabsContent value="inventory">
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                            <Table>
-                                <TableHeader className="bg-gray-50/50">
-                                    <TableRow>
-                                        <TableHead className="w-[100px] text-xs font-semibold text-gray-500 uppercase tracking-wider">Image</TableHead>
-                                        <TableHead className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Product</TableHead>
-                                        <TableHead className="text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Price (₹/kg)</TableHead>
-                                        <TableHead className="text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Stock (kg)</TableHead>
-                                        <TableHead className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</TableHead>
-                                        <TableHead className="text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {inventory.map((item) => {
-                                        // Use local edit value or store value
-                                        const currentPrice = editValues[item.id]?.price ?? item.price;
-                                        const currentStock = editValues[item.id]?.stock ?? item.stock;
-                                        const isModified = editValues[item.id] !== undefined;
+                    <TabsContent value="inventory" className="m-0">
+                        <Card className="border-none shadow-xl shadow-gray-200/50 overflow-hidden bg-white/80 backdrop-blur-sm">
+                            <CardContent className="p-0">
+                                <Table>
+                                    <TableHeader className="bg-gray-50/50 border-b border-gray-100">
+                                        <TableRow className="hover:bg-transparent">
+                                            <TableHead className="w-[120px] py-5 pl-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Image</TableHead>
+                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Product</TableHead>
+                                            <TableHead className="text-right py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Price (₹/kg)</TableHead>
+                                            <TableHead className="text-right py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Stock (kg)</TableHead>
+                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Status</TableHead>
+                                            <TableHead className="text-right py-5 pr-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Action</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {inventory.map((item) => {
+                                            const currentPrice = editValues[item.id]?.price ?? item.price;
+                                            const currentStock = editValues[item.id]?.stock ?? item.stock;
+                                            const isModified = editValues[item.id] !== undefined;
 
-                                        return (
-                                            <TableRow key={item.id} className="hover:bg-gray-50/50 transition-colors">
-                                                <TableCell>
-                                                    <img
-                                                        src={item.image}
-                                                        alt={item.name}
-                                                        className="h-10 w-10 object-cover rounded-lg bg-gray-100"
-                                                    />
-                                                </TableCell>
-                                                <TableCell className="font-medium text-gray-900">{item.name}</TableCell>
-                                                <TableCell className="text-right">
-                                                    <Input
-                                                        type="number"
-                                                        className="w-24 ml-auto text-right"
-                                                        value={currentPrice}
-                                                        onChange={(e) => handleTempUpdate(item.id, 'price', e.target.value)}
-                                                    />
-                                                </TableCell>
-                                                <TableCell className="text-right">
-                                                    <Input
-                                                        type="number"
-                                                        className="w-24 ml-auto text-right"
-                                                        value={currentStock}
-                                                        onChange={(e) => handleTempUpdate(item.id, 'stock', e.target.value)}
-                                                    />
-                                                </TableCell>
-                                                <TableCell>
-                                                    {item.stock === 0 ? (
-                                                        <Badge variant="destructive" className="bg-red-50 text-red-700 hover:bg-red-100 border-red-100">Sold Out</Badge>
-                                                    ) : item.stock < 50 ? (
-                                                        <Badge variant="secondary" className="bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-100">Low Stock</Badge>
-                                                    ) : (
-                                                        <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-100">In Stock</Badge>
-                                                    )}
-                                                </TableCell>
-                                                <TableCell className="text-right">
-                                                    <div className="flex justify-end items-center gap-2">
-                                                        {isModified && (
-                                                            <Button
-                                                                size="sm"
-                                                                className="bg-gray-900 text-white hover:bg-black"
-                                                                onClick={() => saveProduct(item)}
-                                                            >
-                                                                Save
-                                                            </Button>
+                                            return (
+                                                <TableRow key={item.id} className="group hover:bg-gray-50/80 transition-all duration-200 border-gray-50/50">
+                                                    <TableCell className="pl-8 py-4">
+                                                        <div className="h-16 w-16 rounded-2xl overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-shadow bg-white">
+                                                            <img
+                                                                src={item.image}
+                                                                alt={item.name}
+                                                                className="h-full w-full object-cover"
+                                                            />
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-4">
+                                                        <div>
+                                                            <div className="font-bold text-gray-900 text-base">{item.name}</div>
+                                                            <div className="text-xs text-gray-500 font-medium mt-0.5">{item.category}</div>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="text-right py-4">
+                                                        <Input
+                                                            type="number"
+                                                            className="w-24 ml-auto text-right font-semibold text-gray-700 bg-transparent border-transparent hover:border-emerald-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all rounded-lg h-9"
+                                                            value={currentPrice}
+                                                            onChange={(e) => handleTempUpdate(item.id, 'price', e.target.value)}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell className="text-right py-4">
+                                                        <Input
+                                                            type="number"
+                                                            className="w-24 ml-auto text-right font-semibold text-gray-700 bg-transparent border-transparent hover:border-emerald-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all rounded-lg h-9"
+                                                            value={currentStock}
+                                                            onChange={(e) => handleTempUpdate(item.id, 'stock', e.target.value)}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell className="py-4 text-center">
+                                                        {item.stock === 0 ? (
+                                                            <div className="inline-flex items-center px-3 py-1 rounded-full bg-red-50 text-red-600 text-xs font-semibold border border-red-100">
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
+                                                                Sold Out
+                                                            </div>
+                                                        ) : item.stock < 50 ? (
+                                                            <div className="inline-flex items-center px-3 py-1 rounded-full bg-amber-50 text-amber-600 text-xs font-semibold border border-amber-100">
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-2"></span>
+                                                                Low Stock
+                                                            </div>
+                                                        ) : (
+                                                            <div className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-semibold border border-emerald-100">
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2"></span>
+                                                                In Stock
+                                                            </div>
                                                         )}
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            onClick={() => handleDelete(item.id)}
-                                                        >
-                                                            <Trash2 className="h-4 w-4 text-red-500" />
-                                                        </Button>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="text-right pr-8 py-4">
+                                                        <div className="flex justify-end items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            {isModified && (
+                                                                <Button
+                                                                    size="sm"
+                                                                    className="bg-gray-900 text-white hover:bg-black rounded-full h-8 px-4 text-xs font-medium animate-in fade-in zoom-in-95"
+                                                                    onClick={() => saveProduct(item)}
+                                                                >
+                                                                    Save
+                                                                </Button>
+                                                            )}
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 hover:bg-red-50 hover:text-red-600 rounded-full transition-colors"
+                                                                onClick={() => handleDelete(item.id)}
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </Card>
                     </TabsContent>
 
                     {/* Tab 2: Orders */}
-                    <TabsContent value="orders">
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                            <Table>
-                                <TableHeader className="bg-gray-50/50">
-                                    <TableRow>
-                                        <TableHead className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Order ID</TableHead>
-                                        <TableHead className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</TableHead>
-                                        <TableHead className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</TableHead>
-                                        <TableHead className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Items</TableHead>
-                                        <TableHead className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total</TableHead>
-                                        <TableHead className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {orders.length === 0 ? (
-                                        <TableRow>
-                                            <TableCell colSpan={6} className="text-center py-12 text-gray-400">
-                                                No orders found.
-                                            </TableCell>
+                    <TabsContent value="orders" className="m-0">
+                        <Card className="border-none shadow-xl shadow-gray-200/50 overflow-hidden bg-white/80 backdrop-blur-sm">
+                            <CardContent className="p-0">
+                                <Table>
+                                    <TableHeader className="bg-gray-50/50 border-b border-gray-100">
+                                        <TableRow className="hover:bg-transparent">
+                                            <TableHead className="py-5 pl-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Order ID</TableHead>
+                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Date</TableHead>
+                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Customer</TableHead>
+                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Items</TableHead>
+                                            <TableHead className="py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Total</TableHead>
+                                            <TableHead className="py-5 pr-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Status</TableHead>
                                         </TableRow>
-                                    ) : (
-                                        orders.map((order) => (
-                                            <TableRow key={order.id} className="hover:bg-gray-50/50 transition-colors">
-                                                <TableCell className="font-medium text-gray-900">{order.id}</TableCell>
-                                                <TableCell className="text-gray-500">{order.date}</TableCell>
-                                                <TableCell className="text-gray-900">{order.customer}</TableCell>
-                                                <TableCell className="max-w-[200px] truncate text-gray-500" title={order.items}>
-                                                    {order.items}
+                                    </TableHeader>
+                                    <TableBody>
+                                        {orders.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={6} className="text-center py-16 text-gray-400">
+                                                    <div className="flex flex-col items-center justify-center gap-2">
+                                                        <Package className="h-8 w-8 text-gray-300" />
+                                                        <p>No orders found.</p>
+                                                    </div>
                                                 </TableCell>
-                                                <TableCell className="font-medium text-gray-900">₹{order.total?.toLocaleString()}</TableCell>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <select
-                                                        value={order.status}
-                                                        onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
-                                                        className={`text-xs font-semibold px-2 py-1 rounded-full border-none cursor-pointer outline-none focus:ring-2 focus:ring-emerald-500/20 ${order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' :
-                                                            order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
-                                                                'bg-yellow-100 text-yellow-800'
-                                                            }`}
-                                                    >
-                                                        <option value="Pending">Pending</option>
-                                                        <option value="Shipped">Shipped</option>
-                                                        <option value="Delivered">Delivered</option>
-                                                        <option value="Cancelled">Cancelled</option>
-                                                    </select>
-                                                </td>
                                             </TableRow>
-                                        ))
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                        ) : (
+                                            orders.map((order) => (
+                                                <TableRow key={order.id} className="hover:bg-gray-50/80 transition-colors border-gray-50/50">
+                                                    <TableCell className="pl-8 py-4 font-semibold text-gray-900">{order.id}</TableCell>
+                                                    <TableCell className="py-4 text-gray-500">{order.date}</TableCell>
+                                                    <TableCell className="py-4 font-medium text-gray-900">{order.customer}</TableCell>
+                                                    <TableCell className="max-w-[200px] py-4 truncate text-gray-500" title={order.items}>
+                                                        {order.items}
+                                                    </TableCell>
+                                                    <TableCell className="py-4 font-bold text-gray-900">₹{order.total?.toLocaleString()}</TableCell>
+                                                    <td className="pr-8 py-4 whitespace-nowrap">
+                                                        <div className="relative">
+                                                            <select
+                                                                value={order.status}
+                                                                onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
+                                                                className={`appearance-none pl-3 pr-8 py-1.5 rounded-full text-xs font-bold cursor-pointer outline-none transition-all
+                                                                    ${order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' :
+                                                                        order.status === 'Shipped' ? 'bg-blue-100 text-blue-800 hover:bg-blue-200' :
+                                                                            order.status === 'Cancelled' ? 'bg-red-100 text-red-800 hover:bg-red-200' :
+                                                                                'bg-amber-100 text-amber-800 hover:bg-amber-200'
+                                                                    }`}
+                                                            >
+                                                                <option value="Pending">Pending</option>
+                                                                <option value="Shipped">Shipped</option>
+                                                                <option value="Delivered">Delivered</option>
+                                                                <option value="Cancelled">Cancelled</option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                </TableRow>
+                                            ))
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </Card>
                     </TabsContent>
                 </Tabs>
             </div>
