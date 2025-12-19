@@ -58,12 +58,12 @@ export default function Landing() {
     const currentSteps = role === 'farmer' ? farmerSteps : buyerSteps;
 
     return (
-        <div className="w-full bg-stone-50 font-sans text-stone-900 antialiased selection:bg-emerald-200 selection:text-emerald-900">
+        <div className="w-full bg-background font-sans text-stone-900 antialiased selection:bg-emerald-200 selection:text-emerald-900">
 
             {/* --- HERO SECTION --- */}
             <section className="relative min-h-[90vh] w-full flex flex-col md:grid md:grid-cols-12">
                 {/* Left Column: Content */}
-                <div className="order-1 md:order-1 md:col-span-5 flex flex-col justify-center px-6 py-16 md:px-12 lg:px-16 bg-stone-50 z-10">
+                <div className="order-1 md:order-1 md:col-span-5 flex flex-col justify-center px-6 py-16 md:px-12 lg:px-16 bg-background z-10">
                     <div className="max-w-xl mx-auto md:mx-0">
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-stone-900 tracking-tight leading-[1.1] mb-6 animate-fade-in-up">
                             From the Harvest <br />
@@ -89,7 +89,7 @@ export default function Landing() {
                 </div>
 
                 {/* Right Column: Video Visual */}
-                <div className="order-2 md:order-2 md:col-span-7 relative h-[50vh] md:h-full overflow-hidden bg-stone-50 flex items-center justify-center">
+                <div className="order-2 md:order-2 md:col-span-7 relative h-[50vh] md:h-full overflow-hidden bg-background flex items-center justify-center">
                     <video
                         src={heroVideo}
                         className="absolute inset-0 w-full h-full object-cover"
@@ -206,7 +206,7 @@ export default function Landing() {
             </section>
 
             {/* --- BENTO GRID FEATURES --- */}
-            <section className="py-24 md:py-32 bg-stone-50">
+            <section className="py-24 md:py-32 bg-background">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-4 tracking-tight">

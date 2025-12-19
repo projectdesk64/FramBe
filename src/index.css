@@ -3,8 +3,8 @@
 
 @layer base {
   :root {
-    /* Background: Stone-50 (Warm White) #fafaf9 */
-    --background: 60 9% 98%;
+    /* Background: Cool Gray / White Mix */
+    --background: 210 20% 98%;
     /* Foreground: Stone-900 (Warm Black) #1c1917 */
     --foreground: 24 10% 10%;
 
@@ -95,8 +95,8 @@
 
 @layer base {
   body {
-    /* Use the new aliased 'gray-50' (which is Stone-50) */
-    @apply bg-gray-50 text-gray-900 antialiased;
+    /* Use the global background variable */
+    @apply bg-background text-gray-900 antialiased;
   }
 
   html {

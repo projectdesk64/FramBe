@@ -89,9 +89,15 @@ export default function Navbar({ variant = 'landing', user, onLogout }) {
 
                     {variant === 'dashboard' && (
                         <>
-                            <Button variant="ghost" size="sm" asChild>
-                                <Link to="/dashboard/profile">Profile</Link>
-                            </Button>
+                            {location.pathname === '/dashboard/profile' ? (
+                                <Button variant="ghost" size="sm" asChild>
+                                    <Link to={`/dashboard/${user.role}`}>Dashboard</Link>
+                                </Button>
+                            ) : (
+                                <Button variant="ghost" size="sm" asChild>
+                                    <Link to="/dashboard/profile">Profile</Link>
+                                </Button>
+                            )}
                             <Button variant="outline" size="sm" onClick={onLogout}>
                                 Logout
                             </Button>

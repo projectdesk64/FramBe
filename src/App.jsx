@@ -42,7 +42,7 @@ const AppLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 font-sans text-stone-900">
+    <div className="min-h-screen bg-background font-sans text-stone-900">
       <Navbar variant="landing" user={user} onLogout={handleLogout} />
       <main>
         <Outlet />

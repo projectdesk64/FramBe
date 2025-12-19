@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { User, Mail, Shield, MapPin, AlertCircle } from 'lucide-react';
+import { User, Mail, Shield, MapPin, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
@@ -18,7 +18,7 @@ const Profile = () => {
 
     if (!user) {
         return (
-            <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-background flex items-center justify-center p-4">
                 <div className="text-center max-w-md w-full bg-white p-8 rounded-xl shadow-lg border-2 border-dashed border-stone-200">
                     <div className="mx-auto bg-stone-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
                         <AlertCircle className="w-8 h-8 text-stone-400" />
@@ -46,7 +46,7 @@ const Profile = () => {
     const accountId = `FARM-${emailLen * 1234}`;
 
     return (
-        <div className="min-h-screen bg-stone-50 font-sans">
+        <div className="min-h-screen bg-background font-sans">
             {/* Header Banner */}
             <div className="relative h-48 bg-emerald-600">
                 <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">

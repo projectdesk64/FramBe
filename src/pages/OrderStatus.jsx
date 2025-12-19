@@ -28,7 +28,7 @@ export default function OrderStatus() {
     // --- EMPTY STATE (The Fix) ---
     if (!order) {
         return (
-            <div className="min-h-screen bg-stone-50">
+            <div className="min-h-screen bg-background">
                 <Navbar />
                 <div className="flex flex-col items-center justify-center min-h-[80vh] px-4">
                     <div className="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 text-center max-w-md w-full">
@@ -60,7 +60,7 @@ export default function OrderStatus() {
     };
 
     return (
-        <div className="min-h-screen bg-stone-50 pb-12">
+        <div className="min-h-screen bg-background pb-12">
             <Navbar />
 
             {/* Header */}
@@ -78,8 +78,8 @@ export default function OrderStatus() {
                             <p className="text-stone-500">Placed on {new Date(order.date).toLocaleDateString()}</p>
                         </div>
                         <div className={`px-4 py-1.5 rounded-full text-sm font-bold border ${order.status === 'Delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                                order.status === 'Shipped' ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                                    'bg-yellow-50 text-yellow-700 border-yellow-200'
+                            order.status === 'Shipped' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                                'bg-yellow-50 text-yellow-700 border-yellow-200'
                             }`}>
                             {order.status}
                         </div>
@@ -137,7 +137,7 @@ function TimelineItem({ status, icon, title, desc, time }) {
     return (
         <div className={`relative flex items-start mb-8 last:mb-0 ${status === 'upcoming' ? 'opacity-50' : 'opacity-100'}`}>
             <div className={`relative z-10 w-16 h-16 rounded-full flex items-center justify-center border-4 border-white shadow-sm shrink-0 mr-4 ${isCompleted ? 'bg-emerald-600 text-white' :
-                    isCurrent ? 'bg-emerald-100 text-emerald-700 ring-4 ring-emerald-50' : 'bg-stone-100 text-stone-400'
+                isCurrent ? 'bg-emerald-100 text-emerald-700 ring-4 ring-emerald-50' : 'bg-stone-100 text-stone-400'
                 }`}>
                 {React.cloneElement(icon, { size: 24 })}
             </div>
