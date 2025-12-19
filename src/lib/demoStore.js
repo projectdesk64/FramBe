@@ -1,3 +1,8 @@
+import tomatoesImg from '../assets/items/Tomatoes.jpg';
+import onionsImg from '../assets/items/Onions.jpg';
+import potatoesImg from '../assets/items/Potatoes.jpg';
+import greenChilliesImg from '../assets/items/Green_Chillies.jpg';
+
 export const INITIAL_INVENTORY = [
     {
         id: 1,
@@ -6,7 +11,7 @@ export const INITIAL_INVENTORY = [
         stock: 500,
         unit: "kg",
         category: "Vegetables",
-        image: "https://images.unsplash.com/photo-1582284540020-8acbe03f4924?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        image: tomatoesImg
     },
     {
         id: 2,
@@ -15,7 +20,7 @@ export const INITIAL_INVENTORY = [
         stock: 1200,
         unit: "kg",
         category: "Vegetables",
-        image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=800&q=80"
+        image: onionsImg
     },
     {
         id: 3,
@@ -24,7 +29,7 @@ export const INITIAL_INVENTORY = [
         stock: 800,
         unit: "kg",
         category: "Vegetables",
-        image: "https://images.unsplash.com/photo-1518977676641-8f26969e3c6c?auto=format&fit=crop&w=800&q=80"
+        image: potatoesImg
     },
     {
         id: 4,
@@ -33,7 +38,7 @@ export const INITIAL_INVENTORY = [
         stock: 150,
         unit: "kg",
         category: "Vegetables",
-        image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80"
+        image: greenChilliesImg
     }
 ];
 
