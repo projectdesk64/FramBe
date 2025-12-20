@@ -6,8 +6,10 @@ import {
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import heroVideo from '../assets/Logo_Video.mp4';
+import logo from '../assets/logo-upscale.png';
 
 import { Button } from "@/components/ui/button";
+
 
 // --- DATA: TRUST STRIP STATS ---
 const stats = [
@@ -65,9 +67,11 @@ export default function Landing() {
                 {/* Left Column: Content */}
                 <div className="order-1 md:order-1 md:col-span-5 flex flex-col justify-center px-6 py-16 md:px-12 lg:px-16 bg-background z-10">
                     <div className="max-w-xl mx-auto md:mx-0">
-                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-stone-900 tracking-tight leading-[1.1] mb-6 animate-fade-in-up">
-                            From the Harvest <br />
-                            Directly to Your Home.
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.25] md:leading-[1.2] lg:leading-[1.15] mb-6 animate-fade-in-up">
+                            <span className="text-stone-800 flex flex-col md:flex-row items-start md:items-center gap-3">
+                                From Our <img src={logo} alt="FarmBe" className="h-16 md:h-24 lg:h-30 w-auto inline-block object-contain" />
+                            </span>
+                            <span className="text-stone-900">Directly to Your Business.</span>
                         </h1>
                         <p className="text-lg text-stone-600 mb-8 leading-relaxed font-normal max-w-md animate-fade-in-up-delay-1">
                             Bypassing the middleman to connect 500+ local farmers with your kitchen. Peak freshness, fair prices.
