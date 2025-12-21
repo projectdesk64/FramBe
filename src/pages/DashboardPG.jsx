@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import SafeImage from "@/components/common/SafeImage";
 
 const DashboardPG = () => {
     const [inventory, setInventory] = useState([]);
@@ -133,9 +134,10 @@ const DashboardPG = () => {
                                 className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col"
                             >
                                 <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
-                                    <img
+                                    <SafeImage
                                         src={product.image}
                                         alt={product.name}
+                                        category="produce"
                                         className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${isOutOfStock ? 'grayscale opacity-80' : ''}`}
                                     />
                                     {isOutOfStock && (
@@ -255,7 +257,7 @@ const DashboardPG = () => {
                                 <div className="space-y-4">
                                     {cart.map((item) => (
                                         <div key={item.id} className="flex gap-4 p-4 border border-gray-100 rounded-xl bg-white shadow-sm">
-                                            <img src={item.image} alt={item.name} className="w-20 h-20 rounded-lg object-cover bg-gray-100" />
+                                            <SafeImage src={item.image} category="produce" alt={item.name} className="w-20 h-20 rounded-lg object-cover bg-gray-100" />
                                             <div className="flex-1 flex flex-col justify-between">
                                                 <div className="flex justify-between items-start">
                                                     <div>

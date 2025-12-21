@@ -9,6 +9,7 @@ import heroVideo from '../assets/Logo_Video.mp4';
 import logo from '../assets/logo-upscale.png';
 
 import { Button } from "@/components/ui/button";
+import SafeImage from "@/components/common/SafeImage";
 
 
 // --- DATA: TRUST STRIP STATS ---
@@ -68,8 +69,9 @@ export default function Landing() {
                 <div className="order-1 md:order-1 md:col-span-5 flex flex-col justify-center px-6 py-16 md:px-12 lg:px-16 bg-background z-10">
                     <div className="max-w-xl mx-auto md:mx-0">
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.25] md:leading-[1.2] lg:leading-[1.15] mb-6 animate-fade-in-up">
-                            <span className="text-stone-800 flex flex-col md:flex-row items-start md:items-center gap-3">
-                                From Our <img src={logo} alt="FarmBe" className="h-16 md:h-24 lg:h-30 w-auto inline-block object-contain" />
+                            <span className="text-stone-800 flex flex-row flex-nowrap items-center gap-3">
+                                <span className="whitespace-nowrap">From Our</span>
+                                <SafeImage src={logo} alt="FarmBe" category="brand" className="h-12 md:h-24 lg:h-30 w-auto object-contain" />
                             </span>
                             <span className="text-stone-900">Directly to Your Business.</span>
                         </h1>
@@ -224,9 +226,10 @@ export default function Landing() {
                     <div className="grid md:grid-cols-3 gap-6 auto-rows-[300px]">
                         {/* Large Visual Card */}
                         <div className="md:col-span-2 bg-white rounded-3xl p-8 relative overflow-hidden group hover:shadow-2xl transition-all duration-500">
-                            <img
+                            <SafeImage
                                 src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80"
                                 alt="Fresh Veggies"
+                                category="farm"
                                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
@@ -261,9 +264,10 @@ export default function Landing() {
 
                         {/* Image Card 2 */}
                         <div className="md:col-span-2 bg-stone-200 rounded-3xl p-8 relative overflow-hidden group">
-                            <img
+                            <SafeImage
                                 src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80"
                                 alt="Farmer"
+                                category="farm"
                                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 to-transparent" />

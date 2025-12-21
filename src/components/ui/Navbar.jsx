@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo-upscale.png';
 import { Button } from "@/components/ui/button";
+import SafeImage from "@/components/common/SafeImage";
 
 export default function Navbar({ variant = 'landing', user, onLogout }) {
     const location = useLocation();
@@ -13,11 +14,11 @@ export default function Navbar({ variant = 'landing', user, onLogout }) {
                 {/* Logo Section */}
                 <div className="flex items-center gap-4">
                     <Link to="/" className="flex items-center">
-                        <img
+                        <SafeImage
                             src={logo}
                             alt="FarmBe"
+                            category="brand"
                             className="h-20 w-auto object-contain"
-                            onError={(e) => { e.target.style.display = 'none'; }}
                         />
                     </Link>
                     {variant === 'dashboard' && roleLabel && (

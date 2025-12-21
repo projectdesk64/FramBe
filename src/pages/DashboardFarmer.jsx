@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { demoStore } from '@/lib/demoStore';
+import { demoStore } from "@/lib/demoStore";
 import { Package, IndianRupee, AlertTriangle, RefreshCw, Trash2 } from "lucide-react";
+import SafeImage from "@/components/common/SafeImage";
 
 export default function DashboardFarmer() {
     const [inventory, setInventory] = useState([]);
@@ -243,9 +244,10 @@ export default function DashboardFarmer() {
                                                 <TableRow key={item.id} className="group hover:bg-gray-50/80 transition-all duration-200 border-gray-50/50">
                                                     <TableCell className="pl-8 py-4">
                                                         <div className="h-16 w-16 rounded-2xl overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-shadow bg-white">
-                                                            <img
+                                                            <SafeImage
                                                                 src={item.image}
                                                                 alt={item.name}
+                                                                category="produce"
                                                                 className="h-full w-full object-cover"
                                                             />
                                                         </div>

@@ -4,6 +4,7 @@ import { Phone, Download, Truck, Star, CheckCircle, MapPin, ChevronLeft, Navigat
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import SafeImage from "@/components/common/SafeImage";
 import { jsPDF } from "jspdf";
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { demoStore } from "@/lib/demoStore";
@@ -304,9 +305,10 @@ const ETA = () => {
                             {/* Driver Profile */}
                             <div className="flex items-center gap-4 bg-stone-50 p-4 rounded-2xl border border-stone-100">
                                 <div className="relative">
-                                    <img
+                                    <SafeImage
                                         src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100&h=100&fit=crop"
                                         alt="Driver"
+                                        category="logistics"
                                         className="h-14 w-14 rounded-full object-cover border-2 border-white shadow-sm"
                                     />
                                     <div className="absolute -bottom-1 -right-1 bg-emerald-500 h-5 w-5 rounded-full border-2 border-white flex items-center justify-center">

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo-upscale.png';
+import SafeImage from "@/components/common/SafeImage";
 
 export default function Footer() {
     return (
@@ -8,11 +9,11 @@ export default function Footer() {
                 <div className="grid md:grid-cols-4 gap-12 mb-16">
                     <div className="col-span-1 md:col-span-2">
                         <div className="flex items-center gap-3 mb-2">
-                            <img
+                            <SafeImage
                                 src={logo}
                                 alt="FarmBe"
+                                category="brand"
                                 className="h-30 w-auto opacity-90"
-                                onError={(e) => { e.target.style.display = 'none'; }}
                             />
                         </div>
                         <p className="text-stone-500 max-w-sm leading-relaxed">
